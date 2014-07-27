@@ -352,6 +352,7 @@ class RegistrationView(FormView):
             encoded_uid = urlsafe_base64_encode(force_bytes(user.pk))
         c = {
             'email': user.email,
+            'password': user.password1,
             'domain': domain,
             'site_name': site_name,
             'uid': encoded_uid,
