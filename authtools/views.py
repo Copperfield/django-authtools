@@ -20,7 +20,7 @@ from django.utils.http import int_to_base36
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import FormView, TemplateView, RedirectView, View
+from django.views.generic import FormView, TemplateView, RedirectView
 from django.template import loader
 from django.core.mail import send_mail
 from django.contrib import messages
@@ -330,6 +330,7 @@ class RegistrationView(FormView):
     success_url = reverse_lazy('email_confirm_done')
     success_message = ""
     from_email = settings.DEFAULT_FROM_EMAIL
+    email_myself = False
 
     def dispatch(self, *args, **kwargs):
         if self.disallow_authenticated and self.request.user.is_authenticated():
@@ -350,8 +351,13 @@ class RegistrationView(FormView):
             from django.utils.http import urlsafe_base64_encode
             from django.utils.encoding import force_bytes
             encoded_uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+        email_recipient = user.email
+        if self.email_myself:
+            email_recipient = self.from_email
+
         c = {
-            'email': user.email,
+            'email': email_recipient,
             'password': user.password1,
             'domain': domain,
             'site_name': site_name,
