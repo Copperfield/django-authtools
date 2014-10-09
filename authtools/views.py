@@ -370,7 +370,7 @@ class RegistrationView(FormView):
         # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
         email = loader.render_to_string(self.email_template_name, c)
-        send_mail(subject, email, self.from_email, [user.email])
+        send_mail(subject, email, self.from_email, [email_recipient])
         if self.success_message:
             messages.success(self.request, self.success_message)
         return super(RegistrationView, self).form_valid(form)
