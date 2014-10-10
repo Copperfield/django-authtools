@@ -357,7 +357,7 @@ class RegistrationView(FormView):
             email_recipient = self.from_email
 
         c = {
-            'email': email_recipient,
+            'email': user.email,
             'password': user.password1,
             'domain': domain,
             'site_name': site_name,
